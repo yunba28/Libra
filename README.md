@@ -21,7 +21,6 @@ ActorであればSceneが該当し、ComponentであればActorが所属先の�
 
 |File Name|what|
 |:-----|:-----|
-|Libra.zip|現在使用可能なプロジェクトテンプレート<br>VisualStudioのProjectTemplatesフォルダに置くことで使えます<br>デフォルトのパス：<br>C:\Users\(UserName)\Documents\Visual Studio 2022\Templates\ProjectTemplates|
 |README.md|ReadMe|
 |REFERENCE.md|Libraのクラスや関数のリファレンスを記載<br>随時更新|
 
