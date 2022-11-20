@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Libra", "Libra\Libra.vcxproj", "{A45C1A87-39B6-413E-BBC0-B01D1354B677}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A45C1A87-39B6-413E-BBC0-B01D1354B677}.Debug|x64.ActiveCfg = Debug|x64
+		{A45C1A87-39B6-413E-BBC0-B01D1354B677}.Debug|x64.Build.0 = Debug|x64
+		{A45C1A87-39B6-413E-BBC0-B01D1354B677}.Release|x64.ActiveCfg = Release|x64
+		{A45C1A87-39B6-413E-BBC0-B01D1354B677}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B8186C8-3B97-4A1D-A64F-5791471831B2}
+	EndGlobalSection
+EndGlobal
