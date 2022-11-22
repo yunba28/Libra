@@ -94,13 +94,19 @@ namespace Libra::Internal
 
 			Collision collA{};
 			{
+				collA.object = refA;
 				collA.other = refB;
+				collA.info2d.a = pair.a;
+				collA.info2d.b = pair.b;
 				collA.info2d.normal = collision.normal();
 			}
 
 			Collision collB{};
 			{
+				collB.object = refA;
 				collB.other = refA;
+				collB.info2d.a = pair.a;
+				collB.info2d.b = pair.b;
 				collB.info2d.normal = -collision.normal();
 			}
 

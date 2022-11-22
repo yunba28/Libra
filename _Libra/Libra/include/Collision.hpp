@@ -8,10 +8,13 @@ namespace Libra
 {
 	struct Collision
 	{
+		WeakObj<Object> object{};
 		WeakObj<Object> other{};
 
 		struct P2Collision
 		{
+			P2BodyID a{};
+			P2BodyID b{};
 			Vec2 point{0,0};
 			Vec2 normal{ 0,0 };
 			double normalImpulse{};

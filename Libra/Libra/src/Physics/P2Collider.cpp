@@ -7,6 +7,9 @@ namespace Libra
 {
 	P2Collider::P2Collider()
 		: m_p2Body()
+		, m_collisions()
+		, m_lastCollision()
+		, m_prevCollided(false)
 	{
 	}
 
@@ -58,6 +61,20 @@ namespace Libra
 	void P2Collider::addTriangle(const Triangle& _localTriangle, const P2Material& _material, const P2Filter& _filter)
 	{
 		m_p2Body.addTriangle(_localTriangle, _material, _filter);
+	}
+
+	void P2Collider::setDistanceJoint(const WeakObj<P2Collider>& _other, Vec2 _jointPos, double _length, EnableCollision _enableCollision)
+	{
+		auto ps = getActor()->getScene()->_getPhysicsSystem().lock();
+		auto p2World = ps->getP2World();
+
+		p2World.createDistanceJoint(
+			m_p2Body,
+			m_p2Body.getPos(),
+			_other.lock()->m_p2Body,
+			_jointPos,
+			_length,
+			_enableCollision);
 	}
 
 	void P2Collider::setBodyType(P2BodyType _body)
@@ -167,6 +184,16 @@ namespace Libra
 	size_t P2Collider::getShapeCount() const
 	{
 		return m_p2Body.num_shapes();
+	}
+
+	void P2Collider::setAwake(bool _flag)
+	{
+		m_p2Body.setAwake(_flag);
+	}
+
+	void P2Collider::setSleep(bool _flag)
+	{
+		m_p2Body.setSleepEnabled(_flag);
 	}
 
 	void P2Collider::resetShapes()
@@ -282,31 +309,6 @@ namespace Libra
 		m_p2Body.applyTorque(_torque);
 	}
 
-	void P2Collider::setDensity(double _density)
-	{
-		m_p2Body.shape(0).setDensity(_density);
-	}
-
-	void P2Collider::setFilter(P2Filter _filter)
-	{
-		m_p2Body.shape(0).setFilter(_filter);
-	}
-
-	void P2Collider::setFriction(double _friction)
-	{
-		m_p2Body.shape(0).setFriction(_friction);
-	}
-
-	void P2Collider::setRestitution(double _restitution)
-	{
-		m_p2Body.shape(0).setRestitution(_restitution);
-	}
-
-	void P2Collider::setRestitutionThreshold(double _restitutionThreshold)
-	{
-		m_p2Body.shape(0).setRestitutionThreshold(_restitutionThreshold);
-	}
-
 	void P2Collider::setViewWireframe(bool _flag)
 	{
 		setEnableDraw(_flag);
@@ -326,43 +328,37 @@ namespace Libra
 		}
 
 		// 衝突が行われたか
-		bool isCollided = m_currentCollision.isCollided();
-
-		// 前回衝突があったか
-		bool isPrevCollided = m_prevCollision.isCollided();
+		bool isCollided = not m_collisions.empty();
 
 		// イベント発生の条件が整っていない
-		if ((not isPrevCollided) and (not isCollided))
-		{
-			m_prevCollision = Collision{};
+		if ((not m_prevCollided) and (not isCollided))
 			return;
-		}
 
 		auto refs = getActor()->getComponentAll();
 
 		// 当たった瞬間
-		if ((not isPrevCollided) and isCollided)
+		if ((not m_prevCollided) and isCollided)
 		{
 			//最後の衝突を記憶
-			m_lastCollision = m_currentCollision;
+			m_lastCollision = m_collisions.front();
 			callCollisionEvent(refs, &Object::onCollisionEnter);
 			return;
 		}
 
 		// 当たってる間
-		if (isPrevCollided and isCollided)
+		if (m_prevCollided and isCollided)
 		{
-			m_lastCollision = m_currentCollision;
+			m_lastCollision = m_collisions.front();
 			callCollisionEvent(refs, &Object::onCollisionStay);
 			return;
 		}
 
 		// 離れた瞬間
-		if (isPrevCollided and (not isCollided))
+		if (m_prevCollided and (not isCollided))
 		{
-			m_currentCollision = m_lastCollision;
+			m_collisions << m_lastCollision;
 			callCollisionEvent(refs, &Object::onCollisionExit);
-			m_prevCollision = Collision{};
+			m_prevCollided = false;
 			return;
 		}
 	}
@@ -393,7 +389,7 @@ namespace Libra
 
 	void P2Collider::_internalOnCollision(const Collision& _collision)
 	{
-		m_currentCollision = _collision;
+		m_collisions << _collision;
 	}
 
 	void P2Collider::callCollisionEvent(const Array<WeakObj<Component>>& _referents, void(Object::* _event)(const Collision&))
@@ -403,10 +399,13 @@ namespace Libra
 			if (not ref.isLinked())
 				continue;
 
-			((*ref.lock()).*_event)(m_currentCollision);
+			for (auto& collision : m_collisions)
+			{
+				((*ref.lock()).*_event)(collision);
+			}
 		}
-		m_prevCollision = m_currentCollision;
-		m_currentCollision = Collision{};
+		m_prevCollided = true;
+		m_collisions.clear();
 	}
 	
 }

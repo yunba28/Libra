@@ -64,6 +64,12 @@ namespace Libra
 			const P2Material& _material = P2Material{},
 			const P2Filter& _filter = P2Filter{});
 
+		void setDistanceJoint(
+			const WeakObj<P2Collider>& _other,
+			Vec2 _jointPos,
+			double _length,
+			EnableCollision _enableCollision = EnableCollision::Yes);
+
 		/// @brief MultiColliderに設定されたすべての部品を解除し新たなプレースホルダを生成します
 		void resetShapes();
 
@@ -135,15 +141,9 @@ namespace Libra
 
 		size_t getShapeCount()const;
 
-		void setDensity(double _density);
+		void setAwake(bool _flag);
 
-		void setFilter(P2Filter _filter);
-
-		void setFriction(double _friction);
-
-		void setRestitution(double _restitution);
-
-		void setRestitutionThreshold(double _restitutionThreshold);
+		void setSleep(bool _flag);
 
 		void setViewWireframe(bool _flag);
 
@@ -165,14 +165,12 @@ namespace Libra
 
 		P2Body m_p2Body;
 
+		Array<Collision> m_collisions{};
+
 		/// @brief 最後に当たった衝突
 		Collision m_lastCollision{};
 
-		/// @brief 前回の衝突
-		Collision m_prevCollision{};
-
-		/// @brief 今フレームの衝突
-		Collision m_currentCollision{};
+		bool m_prevCollided;
 
 		void callCollisionEvent(const Array<WeakObj<Component>>& _referents, void(Object::* _event)(const Collision&));
 	};
