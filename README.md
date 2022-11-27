@@ -16,8 +16,8 @@ ActorであればSceneが該当し、ComponentであればActorが所属先の�
 ## Detail
 |Folder Name|what|
 |:-----|:-----|
-|\_Libra|Libraのプロジェクトテンプレートを作成するための編集用フォルダ|
-|Libra|Libraのプロジェクトフォルダ|
+|\_LibraEngine|Libraのプロジェクトテンプレートを作成するための編集用フォルダ|
+|LibraEngine|Libraのプロジェクトフォルダ|
 
 |File Name|what|
 |:-----|:-----|
