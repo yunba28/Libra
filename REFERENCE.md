@@ -59,9 +59,12 @@
 |void setName(const String&)|Actorの名前を設定します。<br>既に同じ名前が存在する場合はName \#Nという表記になります。|
 |const String& getName()const|Actorの名前を取得します。|
 |bool compareName(const String&)const noexcept|Actorの名前と文字列を比較します。<br>文字列が名前と一致する場合、trueが返ります。|
-|void setTag(const String&)|Actorのタグを設定します。|
-|const String& getTag()const|Actorのタグを取得します。|
+|void addTag(const String&)|Actorにタグを追加します。|
+|void removeTag(const String&)|Actorからタグを削除します。|
+|const Array\<String\>& getTagList()const|Actorのタグをすべて取得します。|
 |bool compareTag(const String&)const noexcept|Actorのタグと文字列を比較します。<br>文字列がタグと一致する場合、trueが返ります。|
+|bool compareAnyTag(cconst Array\<String\>&)const|Actorのタグと文字列を比較します。<br>文字列のいずれかがタグと一致する場合、trueが返ります。|
+|bool compareAllTag(const Array\<String\>&)const|Actorのタグと文字列を比較します。<br>文字列のすべてがタグと一致する場合、trueが返ります。|
 |template\<class ComponentT\><br>WeakObj\<ComponentT\> attachComponent()|ActorにComponentをアタッチします。|
 |template\<class ComponentT\><br>WeakObj\<ComponentT\> getComponent()const|Actorが持っているComponentを取得します。<br>持っていない場合は空のWeakObjが返ります。|
 |Array\<WeakObj\<ComponentT\>\> getComponentAll()const|Actorが持っているすべてのComponentを取得します。|
